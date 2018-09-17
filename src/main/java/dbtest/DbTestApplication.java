@@ -6,6 +6,8 @@ import io.dropwizard.setup.Environment;
 import dbtest.DbTestConfiguration;
 import dbtest.resources.DbTestResource;
 import dbtest.health.TemplateHealthCheck;
+import com.github.arteam.jdbi3.JdbiFactory;
+import org.jdbi.v3.core.Jdbi;
 
 public class DbTestApplication extends Application<DbTestConfiguration> {
 
@@ -32,6 +34,10 @@ public class DbTestApplication extends Application<DbTestConfiguration> {
         );
       final TemplateHealthCheck healthCheck =
         new TemplateHealthCheck(configuration.getTemplate());
+      final JdbiFactory factory = new JdbiFactory();
+      final Jdbi jdbi = factory.build(environment,
+              configuration.getDatabase(),
+              "postgresql");
       environment.healthChecks().register("template", healthCheck);
       environment.jersey().register(resource);
     }

@@ -4,3 +4,15 @@ logging:
     io.dropwizard.archetypes: DEBUG
 template: Hello, %s!
 defaultName: Stranger
+database:
+  driverClass: org.postgresql.Driver
+  user: postgres
+  url: jdbc:postgresql://docker.local:5432/postgres
+  maxWaitForConnection: 1s
+  validationQuery: "select 1;"
+  validationQueryTimeout: 3s
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: false
+  evictionInterval: 10s
+  minIdleTime: 1 minute
