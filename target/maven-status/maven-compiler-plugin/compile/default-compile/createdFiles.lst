@@ -1,0 +1,5 @@
+dbtest/resources/DbTestResource.class
+dbtest/DbTestConfiguration.class
+dbtest/api/Saying.class
+dbtest/health/TemplateHealthCheck.class
+dbtest/DbTestApplication.class

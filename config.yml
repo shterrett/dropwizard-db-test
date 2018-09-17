@@ -1,0 +1,6 @@
+logging:
+  level: INFO
+  loggers:
+    io.dropwizard.archetypes: DEBUG
+template: Hello, %s!
+defaultName: Stranger
