@@ -2,7 +2,7 @@ logging:
   level: INFO
   loggers:
     io.dropwizard.archetypes: DEBUG
-template: Hello, %s!
+template: Selected %d; %s
 defaultName: Stranger
 database:
   driverClass: org.postgresql.Driver

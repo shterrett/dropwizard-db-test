@@ -8,6 +8,7 @@ import dbtest.resources.DbTestResource;
 import dbtest.health.TemplateHealthCheck;
 import com.github.arteam.jdbi3.JdbiFactory;
 import org.jdbi.v3.core.Jdbi;
+import dbtest.DatabaseMetrics;
 
 public class DbTestApplication extends Application<DbTestConfiguration> {
 
@@ -22,24 +23,25 @@ public class DbTestApplication extends Application<DbTestConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<DbTestConfiguration> bootstrap) {
-        // TODO: application initialization
+        DatabaseMetrics.setRegistry(bootstrap.getMetricRegistry());
     }
 
     @Override
     public void run(final DbTestConfiguration configuration,
                     final Environment environment) {
-      final DbTestResource resource = new DbTestResource(
-          configuration.getTemplate(),
-          configuration.getDefaultName()
+        final TemplateHealthCheck healthCheck =
+                new TemplateHealthCheck(configuration.getTemplate());
+        final JdbiFactory factory = new JdbiFactory();
+        final Jdbi jdbi = factory.build(environment,
+                configuration.getDatabase(),
+                "postgresql");
+        environment.healthChecks().register("template", healthCheck);
+        final DbTestResource resource = new DbTestResource(
+                configuration.getTemplate(),
+                configuration.getDefaultName(),
+                jdbi
         );
-      final TemplateHealthCheck healthCheck =
-        new TemplateHealthCheck(configuration.getTemplate());
-      final JdbiFactory factory = new JdbiFactory();
-      final Jdbi jdbi = factory.build(environment,
-              configuration.getDatabase(),
-              "postgresql");
-      environment.healthChecks().register("template", healthCheck);
-      environment.jersey().register(resource);
+        environment.jersey().register(resource);
     }
 
 }
